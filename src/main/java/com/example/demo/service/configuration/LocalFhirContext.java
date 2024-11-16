@@ -1,4 +1,4 @@
-package com.example.demo.service.fhir;
+package com.example.demo.service.configuration;
 
 import ca.uhn.fhir.context.FhirContext;
 import org.springframework.stereotype.Component;

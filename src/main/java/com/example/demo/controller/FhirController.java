@@ -4,7 +4,7 @@ import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.parser.IParser;
 import com.example.demo.entities.Person;
 import com.example.demo.service.ProprietaryApiService;
-import com.example.demo.service.fhir.LocalFhirContext;
+import com.example.demo.service.configuration.LocalFhirContext;
 import com.example.demo.service.mapper.PersonMapper;
 import org.hl7.fhir.r4.model.OperationOutcome;
 import org.hl7.fhir.r4.model.Patient;
@@ -68,7 +68,9 @@ public class FhirController {
 
     private static OperationOutcome buildOperationOutcome(String message) {
         OperationOutcome operationOutcome = new OperationOutcome();
-        operationOutcome.addIssue().setSeverity(OperationOutcome.IssueSeverity.ERROR)
+        operationOutcome
+                .addIssue()
+                .setSeverity(OperationOutcome.IssueSeverity.ERROR)
                 .setCode(OperationOutcome.IssueType.EXCEPTION)
                 .setDiagnostics(message);
         return operationOutcome;
