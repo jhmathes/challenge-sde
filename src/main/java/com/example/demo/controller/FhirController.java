@@ -4,10 +4,7 @@ import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.parser.IParser;
 import com.example.demo.service.LocalFhirContext;
 import com.example.demo.service.ProprietaryApiService;
-import org.hl7.fhir.r4.model.DomainResource;
-import org.hl7.fhir.r4.model.OperationOutcome;
-import org.hl7.fhir.r4.model.Patient;
-import org.hl7.fhir.r4.model.PrimitiveType;
+import org.hl7.fhir.r4.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,14 +33,16 @@ public class FhirController {
         this.fhirContext = localFhirContext.getFhirContext();
     }
 
-    @PostMapping("/Patient") // Mapped HTTP POST-Anfragen auf diesen Endpunkt
-    public ResponseEntity<DomainResource> createPatient(@RequestBody String patientResource) {
+    //FIXME RESPONSE Currently parsed to String, there is a parsing error during serialization my be fixed in newer HAPI FHIR version
+    @PostMapping(value = "/Patient", produces = "application/json") // Mapped HTTP POST-Anfragen auf diesen Endpunkt
+    public ResponseEntity<String> createPatient(@RequestBody String patientResource) {
+        IParser parser = fhirContext.newJsonParser();
         try {
             // Loggt die erhaltene Anfrage
             logger.info(() -> "Received request to create patient: " + patientResource);
 
             // Erzeugt einen JSON-Parser für FHIR
-            IParser parser = fhirContext.newJsonParser();
+
             // Parsen des Patient-Ressource-Strings in ein Patient-Objekt
             Patient patient = parser.parseResource(Patient.class, patientResource);
 
@@ -69,16 +68,17 @@ public class FhirController {
             if (apiSuccess) {
                 // Loggt und gibt eine Erfolgsantwort zurück, wenn die API-Anfrage erfolgreich war
                 logger.info("Patient data sent successfully.");
-                return ResponseEntity.status(HttpStatus.CREATED).body(patient);
+                return ResponseEntity.status(HttpStatus.CREATED).body(parser.encodeResourceToString(patient));
             } else {
                 // Loggt und gibt eine Fehlerantwort zurück, wenn die API-Anfrage fehlschlägt
                 logger.severe("Failed to send patient data to proprietary API.");
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(buildOpperationOutcome("Error occurred while creating patient."));
+
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(parser.encodeResourceToString(buildOpperationOutcome("Error occurred while creating patient.")));
             }
         } catch (RuntimeException e) {
             // Loggt und gibt eine Fehlerantwort zurück, wenn eine Ausnahme auftritt
             logger.log(Level.SEVERE, "Exception occurred while creating patient", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(buildOpperationOutcome("Exception occurred while creating patient."));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(parser.encodeResourceToString(buildOpperationOutcome("Exception occurred while creating patient.")));
         }
     }
 
@@ -88,6 +88,10 @@ public class FhirController {
         operationOutcome.addIssue().setSeverity(OperationOutcome.IssueSeverity.ERROR)
                 .setCode(OperationOutcome.IssueType.EXCEPTION)
                 .setDiagnostics(message);
+        Meta value = new Meta();
+        value.setLastUpdatedElement(InstantType.now());
+        operationOutcome.setMeta(value);
+        value.setIdElement(new StringType("TEST"));
         return operationOutcome;
     }
 

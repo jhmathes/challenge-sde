@@ -31,7 +31,7 @@ public class ProprietaryApiService {
     public boolean sendPatientData(String firstName, String lastName, String birthDate) {
         try {
             // URL der proprietären API
-            String url = "http://localhost:3001/fhir/Person";
+            String url = "http://localhost:3001/Person";
             // Erstellen des Anfragekörpers mit den Patientendaten
             String requestBody = String.format("{\"firstName\":\"%s\",\"lastName\":\"%s\",\"birthDate\":\"%s\"}",
                     firstName, lastName, birthDate);
