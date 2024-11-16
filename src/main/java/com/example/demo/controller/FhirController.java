@@ -2,9 +2,12 @@ package com.example.demo.controller;
 
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.parser.IParser;
+import com.example.demo.model.Document;
 import com.example.demo.model.Person;
+import com.example.demo.model.mapper.DocumentMapper;
 import com.example.demo.model.mapper.PersonMapper;
 import com.example.demo.service.ProprietaryApiService;
+import org.hl7.fhir.r4.model.DocumentReference;
 import org.hl7.fhir.r4.model.OperationOutcome;
 import org.hl7.fhir.r4.model.Patient;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,25 +40,17 @@ public class FhirController {
     //FIXME RESPONSE Currently parsed to String, there is a parsing error during serialization my be fixed in newer HAPI FHIR version
     @PostMapping(value = "/Patient", produces = "application/json") // Mapped HTTP POST-Anfragen auf diesen Endpunkt
     public ResponseEntity<String> createPatient(@RequestBody String patientResource) {
-
         try {
-            // Loggt die erhaltene Anfrage
             logger.info(() -> "Received request to create patient: " + patientResource);
-            // Parsen des Patient-Ressource-Strings in ein Patient-Objekt
             Patient patient = parser.parseResource(Patient.class, patientResource);
-            //Mappe den Patienten auf eine Person
             Person person = PersonMapper.mapPatientToPerson(patient);
-            // Loggt die extrahierten und konvertierten Patientendaten
             logger.info(() -> "Parsed patient data: " + person);
-            // Sendet die Patientendaten an die proprietäre API
             if (proprietaryApiService.sendPatientData(person)) {
-                // Loggt und gibt eine Erfolgsantwort zurück, wenn die API-Anfrage erfolgreich war
                 logger.info("Patient data sent successfully.");
                 return ResponseEntity.status(HttpStatus.CREATED).body(parser.encodeResourceToString(patient));
             } else {
-                // Loggt und gibt eine Fehlerantwort zurück, wenn die API-Anfrage fehlschlägt
                 logger.severe("Failed to send patient data to proprietary API.");
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(parser.encodeResourceToString(buildOperationOutcome("Error occurred while creating patient.")));
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(parser.encodeResourceToString(buildOperationOutcome("Failed to send patient data to proprietary API.")));
             }
         } catch (RuntimeException e) {
             // Loggt und gibt eine Fehlerantwort zurück, wenn eine Ausnahme auftritt
@@ -72,6 +67,29 @@ public class FhirController {
                 .setCode(OperationOutcome.IssueType.EXCEPTION)
                 .setDiagnostics(message);
         return operationOutcome;
+    }
+
+    @PostMapping(value = "/DocumentReference", produces = "application/json") // Mapped HTTP POST-Anfragen auf diesen Endpunkt
+    public ResponseEntity<String> createDocument(@RequestBody String documentResource) {
+        try {
+            logger.info(() -> "Received request to create document: " + documentResource);
+            // Parsen des Patient-Ressource-Strings in ein Patient-Objekt
+            DocumentReference documentReference = parser.parseResource(DocumentReference.class, documentResource);
+            //TODO ISiLKDokumentenMetadaten Profil laden, um dieses hier prüfen zu können
+            Document document = DocumentMapper.mapDocumentReferenceToDocument(documentReference);
+            if (proprietaryApiService.sendDocument(document)) {
+                logger.info("Document sent successfully.");
+                return ResponseEntity.status(HttpStatus.CREATED).body(parser.encodeResourceToString(documentReference));
+            } else {
+                String msg = "Failed to send document to proprietary API.";
+                logger.severe(msg);
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(parser.encodeResourceToString(buildOperationOutcome(msg)));
+            }
+        } catch (RuntimeException e) {
+            String msg = "Exception occurred while creating document. " + e.getMessage();
+            logger.log(Level.SEVERE, msg, e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(parser.encodeResourceToString(buildOperationOutcome(msg)));
+        }
     }
 
 }
