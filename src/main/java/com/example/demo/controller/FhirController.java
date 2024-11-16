@@ -6,7 +6,8 @@ import com.example.demo.entities.Person;
 import com.example.demo.service.ProprietaryApiService;
 import com.example.demo.service.fhir.LocalFhirContext;
 import com.example.demo.service.mapper.PersonMapper;
-import org.hl7.fhir.r4.model.*;
+import org.hl7.fhir.r4.model.OperationOutcome;
+import org.hl7.fhir.r4.model.Patient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -72,10 +73,6 @@ public class FhirController {
         operationOutcome.addIssue().setSeverity(OperationOutcome.IssueSeverity.ERROR)
                 .setCode(OperationOutcome.IssueType.EXCEPTION)
                 .setDiagnostics(message);
-        Meta value = new Meta();
-        value.setLastUpdatedElement(InstantType.now());
-        operationOutcome.setMeta(value);
-        value.setIdElement(new StringType("TEST"));
         return operationOutcome;
     }
 
