@@ -1,6 +1,6 @@
 package com.example.demo.service;
 
-import com.example.demo.entities.Person;
+import com.example.demo.model.Person;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

@@ -2,10 +2,9 @@ package com.example.demo.controller;
 
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.parser.IParser;
-import com.example.demo.entities.Person;
+import com.example.demo.model.Person;
+import com.example.demo.model.mapper.PersonMapper;
 import com.example.demo.service.ProprietaryApiService;
-import com.example.demo.service.configuration.LocalFhirContext;
-import com.example.demo.service.mapper.PersonMapper;
 import org.hl7.fhir.r4.model.OperationOutcome;
 import org.hl7.fhir.r4.model.Patient;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,11 +28,10 @@ public class FhirController {
     private final IParser parser;
 
     @Autowired
-    public FhirController(ProprietaryApiService proprietaryApiService, LocalFhirContext localFhirContext) {
+    public FhirController(ProprietaryApiService proprietaryApiService, FhirContext localFhirContext) {
         this.proprietaryApiService = proprietaryApiService;
-        FhirContext fhirContext = localFhirContext.getFhirContext();
         // Erzeugt einen JSON-Parser für FHIR
-        parser = fhirContext.newJsonParser();
+        parser = localFhirContext.newJsonParser();
     }
 
     //FIXME RESPONSE Currently parsed to String, there is a parsing error during serialization my be fixed in newer HAPI FHIR version

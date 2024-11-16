@@ -1,6 +1,6 @@
 package com.example.demo.service;
 
-import com.example.demo.entities.Person;
+import com.example.demo.model.Person;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

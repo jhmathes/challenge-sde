@@ -1,7 +1,7 @@
-package com.example.demo.service.mapper;
+package com.example.demo.model.mapper;
 
-import com.example.demo.entities.Person;
-import com.example.demo.service.DateConverter;
+import com.example.demo.model.Person;
+import com.example.demo.util.DateConverter;
 import org.hl7.fhir.r4.model.HumanName;
 import org.hl7.fhir.r4.model.Patient;
 import org.hl7.fhir.r4.model.PrimitiveType;
