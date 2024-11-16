@@ -4,6 +4,7 @@ import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.parser.IParser;
 import com.example.demo.service.ProprietaryApiService;
 import org.hl7.fhir.r4.model.Patient;
+import org.hl7.fhir.r4.model.PrimitiveType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,8 +23,12 @@ public class FhirController {
 
     private static final Logger logger = Logger.getLogger(FhirController.class.getName());
 
+    private final ProprietaryApiService proprietaryApiService;
+
     @Autowired
-    private ProprietaryApiService proprietaryApiService;
+    public FhirController(ProprietaryApiService proprietaryApiService) {
+        this.proprietaryApiService = proprietaryApiService;
+    }
 
     // Erzeugt ein FhirContext-Objekt für FHIR R4
     private final FhirContext fhirContext = FhirContext.forR4();
@@ -32,7 +37,7 @@ public class FhirController {
     public ResponseEntity<String> createPatient(@RequestBody String patientResource) {
         try {
             // Loggt die erhaltene Anfrage
-            logger.info("Received request to create patient: " + patientResource);
+            logger.info(() -> "Received request to create patient: " + patientResource);
 
             // Erzeugt einen JSON-Parser für FHIR
             IParser parser = fhirContext.newJsonParser();
@@ -41,7 +46,7 @@ public class FhirController {
 
             // Extrahieren des Vornamens aus der Patient-Ressource
             String firstName = patient.getName().get(0).getGiven().stream()
-                    .map(namePart -> namePart.getValue())
+                    .map(PrimitiveType::getValue)
                     .collect(Collectors.joining(" "));
             // Extrahieren des Nachnamens aus der Patient-Ressource
             String lastName = patient.getName().get(0).getFamily();
@@ -52,7 +57,8 @@ public class FhirController {
             birthDate = convertDate(birthDate);
 
             // Loggt die extrahierten und konvertierten Patientendaten
-            logger.info("Parsed patient data: " + firstName + " " + lastName + ", Birthdate: " + birthDate);
+            String finalBirthDate = birthDate;
+            logger.info(() -> "Parsed patient data: " + firstName + " " + lastName + ", Birthdate: " + finalBirthDate);
 
             // Sendet die Patientendaten an die proprietäre API
             boolean apiSuccess = proprietaryApiService.sendPatientData(firstName, lastName, birthDate);
