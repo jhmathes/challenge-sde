@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.entities.Person;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -28,13 +29,13 @@ public class ProprietaryApiService {
      * @return true, wenn die API-Anfrage erfolgreich war; false, wenn ein Fehler aufgetreten ist
      */
 
-    public boolean sendPatientData(String firstName, String lastName, String birthDate) {
+    public boolean sendPatientData(Person person) {
         try {
             // URL der proprietären API
             String url = "http://localhost:3001/Person";
             // Erstellen des Anfragekörpers mit den Patientendaten
             String requestBody = String.format("{\"firstName\":\"%s\",\"lastName\":\"%s\",\"birthDate\":\"%s\"}",
-                    firstName, lastName, birthDate);
+                    person.getFirstName(), person.getLastName(), person.getBirthDate());
 
             // Loggt die URL und den Anfragekörper
             logger.info(() -> "Sending request to proprietary API: " + url);
