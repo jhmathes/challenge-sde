@@ -21,40 +21,20 @@ public class Document {
         return kdlCode;
     }
 
-    public void setKdlCode(String kdlCode) {
-        this.kdlCode = kdlCode;
-    }
-
     public Integer getPatientId() {
         return patientId;
-    }
-
-    public void setPatientId(Integer patientId) {
-        this.patientId = patientId;
     }
 
     public Integer getVisitNumber() {
         return visitNumber;
     }
 
-    public void setVisitNumber(Integer visitNumber) {
-        this.visitNumber = visitNumber;
-    }
-
     public String getDateCreated() {
         return dateCreated;
     }
-
-    public void setDateCreated(String dateCreated) {
-        this.dateCreated = dateCreated;
-    }
-
+    
     public byte[] getContentB64() {
         return contentB64;
-    }
-
-    public void setContentB64(byte[] contentB64) {
-        this.contentB64 = contentB64;
     }
 
     public static class DocumentBuilder {
