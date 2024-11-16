@@ -1,0 +1,66 @@
+{
+	"info": {
+		"_postman_id": "59d0add8-b149-453d-b495-052539ac0907",
+		"name": "FHIR-API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "30396757"
+	},
+	"item": [
+		{
+			"name": "FHIR_PATIENT",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"resourceType\": \"Patient\",\n    \"id\": \"example\",\n    \"text\":\n    {\n        \"status\": \"generated\",\n        \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\">\\n\\t\\t\\t<table>\\n\\t\\t\\t\\t<tbody>\\n\\t\\t\\t\\t\\t<tr>\\n\\t\\t\\t\\t\\t\\t<td>Name</td>\\n\\t\\t\\t\\t\\t\\t<td>Peter James \\n              <b>Chalmers</b> (&quot;Jim&quot;)\\n            </td>\\n\\t\\t\\t\\t\\t</tr>\\n\\t\\t\\t\\t\\t<tr>\\n\\t\\t\\t\\t\\t\\t<td>Address</td>\\n\\t\\t\\t\\t\\t\\t<td>534 Erewhon, Pleasantville, Vic, 3999</td>\\n\\t\\t\\t\\t\\t</tr>\\n\\t\\t\\t\\t\\t<tr>\\n\\t\\t\\t\\t\\t\\t<td>Contacts</td>\\n\\t\\t\\t\\t\\t\\t<td>Home: unknown. Work: (03) 5555 6473</td>\\n\\t\\t\\t\\t\\t</tr>\\n\\t\\t\\t\\t\\t<tr>\\n\\t\\t\\t\\t\\t\\t<td>Id</td>\\n\\t\\t\\t\\t\\t\\t<td>MRN: 12345 (Acme Healthcare)</td>\\n\\t\\t\\t\\t\\t</tr>\\n\\t\\t\\t\\t</tbody>\\n\\t\\t\\t</table>\\n\\t\\t</div>\"\n    },\n    \"identifier\":\n    [\n        {\n            \"use\": \"usual\",\n            \"type\":\n            {\n                \"coding\":\n                [\n                    {\n                        \"system\": \"http://terminology.hl7.org/CodeSystem/v2-0203\",\n                        \"code\": \"MR\"\n                    }\n                ]\n            },\n            \"system\": \"urn:oid:1.2.36.146.595.217.0.1\",\n            \"value\": \"12345\",\n            \"period\":\n            {\n                \"start\": \"2001-05-06\"\n            },\n            \"assigner\":\n            {\n                \"display\": \"Acme Healthcare\"\n            }\n        }\n    ],\n    \"active\": true,\n    \"name\":\n    [\n        {\n            \"use\": \"official\",\n            \"family\": \"Chalmers\",\n            \"given\":\n            [\n                \"Peter\",\n                \"James\"\n            ]\n        },\n        {\n            \"use\": \"usual\",\n            \"given\":\n            [\n                \"Jim\"\n            ]\n        },\n        {\n            \"use\": \"maiden\",\n            \"family\": \"Windsor\",\n            \"given\":\n            [\n                \"Peter\",\n                \"James\"\n            ],\n            \"period\":\n            {\n                \"end\": \"2002\"\n            }\n        }\n    ],\n    \"telecom\":\n    [\n        {\n            \"use\": \"home\"\n        },\n        {\n            \"system\": \"phone\",\n            \"value\": \"(03) 5555 6473\",\n            \"use\": \"work\",\n            \"rank\": 1\n        },\n        {\n            \"system\": \"phone\",\n            \"value\": \"(03) 3410 5613\",\n            \"use\": \"mobile\",\n            \"rank\": 2\n        },\n        {\n            \"system\": \"phone\",\n            \"value\": \"(03) 5555 8834\",\n            \"use\": \"old\",\n            \"period\":\n            {\n                \"end\": \"2014\"\n            }\n        }\n    ],\n    \"gender\": \"male\",\n    \"birthDate\": \"1974-12-25\",\n    \"_birthDate\":\n    {\n        \"extension\":\n        [\n            {\n                \"url\": \"http://hl7.org/fhir/StructureDefinition/patient-birthTime\",\n                \"valueDateTime\": \"1974-12-25T14:35:45-05:00\"\n            }\n        ]\n    },\n    \"deceasedBoolean\": false,\n    \"address\":\n    [\n        {\n            \"use\": \"home\",\n            \"type\": \"both\",\n            \"text\": \"534 Erewhon St PeasantVille, Rainbow, Vic  3999\",\n            \"line\":\n            [\n                \"534 Erewhon St\"\n            ],\n            \"city\": \"PleasantVille\",\n            \"district\": \"Rainbow\",\n            \"state\": \"Vic\",\n            \"postalCode\": \"3999\",\n            \"period\":\n            {\n                \"start\": \"1974-12-25\"\n            }\n        }\n    ],\n    \"contact\":\n    [\n        {\n            \"relationship\":\n            [\n                {\n                    \"coding\":\n                    [\n                        {\n                            \"system\": \"http://terminology.hl7.org/CodeSystem/v2-0131\",\n                            \"code\": \"N\"\n                        }\n                    ]\n                }\n            ],\n            \"name\":\n            {\n                \"family\": \"du MarchÃ©\",\n                \"_family\":\n                {\n                    \"extension\":\n                    [\n                        {\n                            \"url\": \"http://hl7.org/fhir/StructureDefinition/humanname-own-prefix\",\n                            \"valueString\": \"VV\"\n                        }\n                    ]\n                },\n                \"given\":\n                [\n                    \"BÃ©nÃ©dicte\"\n                ]\n            },\n            \"telecom\":\n            [\n                {\n                    \"system\": \"phone\",\n                    \"value\": \"+33 (237) 998327\"\n                }\n            ],\n            \"address\":\n            {\n                \"use\": \"home\",\n                \"type\": \"both\",\n                \"line\":\n                [\n                    \"534 Erewhon St\"\n                ],\n                \"city\": \"PleasantVille\",\n                \"district\": \"Rainbow\",\n                \"state\": \"Vic\",\n                \"postalCode\": \"3999\",\n                \"period\":\n                {\n                    \"start\": \"1974-12-25\"\n                }\n            },\n            \"gender\": \"female\",\n            \"period\":\n            {\n                \"start\": \"2012\"\n            }\n        }\n    ],\n    \"managingOrganization\":\n    {\n        \"reference\": \"Organization/1\"\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/Patient",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Patient"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "FHIR_Document",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"resourceType\": \"DocumentReference\",\n    \"id\": \"dok-beispiel-server\",\n    \"meta\": {\n        \"profile\": [\n            \"https://gematik.de/fhir/isik/StructureDefinition/ISiKDokumentenMetadaten\"\n        ],\n        \"security\": [\n            {\n                \"system\": \"http://terminology.hl7.org/CodeSystem/v3-ActReason\",\n                \"code\": \"HTEST\"\n            }\n        ]\n    },\n    \"masterIdentifier\": {\n        \"system\": \"urn:ietf:rfc:3986\",\n        \"value\": \"urn:oid:1.2.840.113556.1.8000.2554.58783.21864.3474.19410.44358.58254.41281.46340\"\n    },\n    \"status\": \"current\",\n    \"type\": {\n        \"coding\": [\n            {\n                \"system\": \"http://dvmd.de/fhir/CodeSystem/kdl\",\n                \"code\": \"PT130102\",\n                \"display\": \"Molekularpathologiebefund\"\n            },\n            {\n                \"system\": \"http://ihe-d.de/CodeSystems/IHEXDStypeCode\",\n                \"code\": \"PATH\",\n                \"display\": \"Pathologiebefundberichte\"\n            }\n        ]\n    },\n    \"category\": [\n        {\n            \"coding\": [\n                {\n                    \"system\": \"http://ihe-d.de/CodeSystems/IHEXDSclassCode\",\n                    \"code\": \"BEF\",\n                    \"display\": \"Befundbericht\"\n                }\n            ]\n        }\n    ],\n    \"subject\": {\n        \"reference\": \"Patient/PatientinMusterfrau\"\n    },\n    \"description\": \"Molekularpathologiebefund vom 31.12.21\",\n    \"securityLabel\": [\n        {\n            \"coding\": [\n                {\n                    \"system\": \"http://terminology.hl7.org/CodeSystem/v3-Confidentiality\",\n                    \"code\": \"N\"\n                }\n            ]\n        }\n    ],\n    \"content\": [\n        {\n            \"attachment\": {\n                \"contentType\": \"application/pdf\",\n                \"language\": \"de\",\n                \"data\": \"VkVWVFZGWkJURlZG\",\n                \"url\": \"https://mein-Dokumentenserver/dokumente/1.2.840.113556.1.8000.2554.58783.21864.3474.19410.44358.58254.41281.46340.pdf\",\n                \"creation\": \"2020-12-31T23:50:50-05:00\"\n            },\n            \"format\": {\n                \"system\": \"http://ihe.net/fhir/ihe.formatcode.fhir/CodeSystem/formatcode\",\n                \"code\": \"urn:ihe:iti:xds:2017:mimeTypeSufficient\",\n                \"display\": \"mimeType Sufficient\"\n            }\n        }\n    ],\n    \"context\": {\n        \"encounter\": [\n            {\n                \"reference\": \"Encounter/BeispielBesuch\"\n            }\n        ],\n        \"facilityType\": {\n            \"coding\": [\n                {\n                    \"system\": \"http://ihe-d.de/CodeSystems/PatientBezogenenGesundheitsversorgung\",\n                    \"code\": \"KHS\",\n                    \"display\": \"Krankenhaus\"\n                }\n            ]\n        },\n        \"practiceSetting\": {\n            \"coding\": [\n                {\n                    \"system\": \"http://ihe-d.de/CodeSystems/AerztlicheFachrichtungen\",\n                    \"code\": \"ALLG\"\n                }\n            ]\n        }\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/DocumentReference",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"DocumentReference"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
