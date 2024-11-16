@@ -58,7 +58,7 @@ public class ProprietaryApiService {
                             "\"dateCreated\":\"%s\"" +
                             "\"contentB64\":\"%s\"" +
                             "}",
-                    document.getKdlSource(), document.getPatientId(), document.getVisitNumber(), document.getDateCreated(), Arrays.toString(document.getContentB64()));
+                    document.getKdlCode(), document.getPatientId(), document.getVisitNumber(), document.getDateCreated(), Arrays.toString(document.getContentB64()));
             return sendPostRequest(url, requestBody);
 
         } catch (Exception e) {

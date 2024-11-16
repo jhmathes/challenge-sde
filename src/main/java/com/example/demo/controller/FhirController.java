@@ -85,6 +85,7 @@ public class FhirController {
             logger.info(() -> "Received request to create document: " + documentResource);
             // Parsen des Patient-Ressource-Strings in ein Patient-Objekt
             DocumentReference documentReference = parser.parseResource(DocumentReference.class, documentResource);
+            //TODO ISiLKDokumentenMetadaten Profil laden, um dieses hier prüfen zu können
             //Mappe den Patienten auf eine Person
             Document document = DocumentMapper.mapDocumentReferenceToDocument(documentReference);
             if (proprietaryApiService.sendDocument(document)) {
@@ -93,13 +94,15 @@ public class FhirController {
                 return ResponseEntity.status(HttpStatus.CREATED).body(parser.encodeResourceToString(documentReference));
             } else {
                 // Loggt und gibt eine Fehlerantwort zurück, wenn die API-Anfrage fehlschlägt
-                logger.severe("Failed to send document to proprietary API.");
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(parser.encodeResourceToString(buildOperationOutcome("Error occurred while creating document.")));
+                String msg = "Failed to send document to proprietary API.";
+                logger.severe(msg);
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(parser.encodeResourceToString(buildOperationOutcome(msg)));
             }
         } catch (RuntimeException e) {
             // Loggt und gibt eine Fehlerantwort zurück, wenn eine Ausnahme auftritt
-            logger.log(Level.SEVERE, "Exception occurred while creating document", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(parser.encodeResourceToString(buildOperationOutcome("Exception occurred while creating document.")));
+            String msg = "Exception occurred while creating document. " + e.getMessage();
+            logger.log(Level.SEVERE, msg, e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(parser.encodeResourceToString(buildOperationOutcome(msg)));
         }
     }
 

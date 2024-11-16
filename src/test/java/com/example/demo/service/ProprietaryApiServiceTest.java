@@ -58,7 +58,7 @@ class ProprietaryApiServiceTest {
         ).thenReturn(new ResponseEntity<>(HttpStatus.CREATED));
         //set field basePath in ProprietaryApiService, which is not loaded from application.properties
         ReflectionTestUtils.setField(proprietaryApiService, "basePath", "http://localhost:3001");
-        boolean b = proprietaryApiService.sendDocument(new Document("codeCodeCode", 1, 2, "01.01.1970", "contentB64".getBytes(StandardCharsets.UTF_8)));
+        boolean b = proprietaryApiService.sendDocument(buildDefaultDocument());
         Assertions.assertTrue(b);
     }
 
@@ -70,7 +70,17 @@ class ProprietaryApiServiceTest {
         ).thenReturn(new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
         //set field basePath in ProprietaryApiService, which is not loaded from application.properties
         ReflectionTestUtils.setField(proprietaryApiService, "basePath", "http://localhost:3001");
-        boolean b = proprietaryApiService.sendDocument(new Document("codeCodeCode", 1, 2, "01.01.1970", "contentB64".getBytes(StandardCharsets.UTF_8)));
+        boolean b = proprietaryApiService.sendDocument(buildDefaultDocument());
         Assertions.assertFalse(b);
+    }
+
+    private static Document buildDefaultDocument() {
+        Document.DocumentBuilder documentBuilder = new Document.DocumentBuilder();
+        documentBuilder.setKdlCode("codeCodeCode");
+        documentBuilder.setPatientId("1");
+        documentBuilder.setVisitNumber("2");
+        documentBuilder.setDateCreated("01.01.1970");
+        documentBuilder.setContentB64("contentB64".getBytes(StandardCharsets.UTF_8));
+        return documentBuilder.build();
     }
 }
