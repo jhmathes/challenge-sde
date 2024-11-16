@@ -7,6 +7,17 @@ public class Document {
     String dateCreated;
     byte[] contentB64;
 
+    public Document() {
+    }
+
+    public Document(String kdlSource, Integer patientId, Integer visitNumber, String dateCreated, byte[] contentB64) {
+        this.kdlSource = kdlSource;
+        this.patientId = patientId;
+        this.visitNumber = visitNumber;
+        this.dateCreated = dateCreated;
+        this.contentB64 = contentB64;
+    }
+
     public String getKdlSource() {
         return kdlSource;
     }
