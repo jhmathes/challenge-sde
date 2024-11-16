@@ -43,14 +43,12 @@ public class FhirController {
         try {
             // Loggt die erhaltene Anfrage
             logger.info(() -> "Received request to create patient: " + patientResource);
-
             // Parsen des Patient-Ressource-Strings in ein Patient-Objekt
             Patient patient = parser.parseResource(Patient.class, patientResource);
             //Mappe den Patienten auf eine Person
             Person person = PersonMapper.mapPatientToPerson(patient);
             // Loggt die extrahierten und konvertierten Patientendaten
             logger.info(() -> "Parsed patient data: " + person);
-
             // Sendet die Patientendaten an die proprietäre API
             if (proprietaryApiService.sendPatientData(person)) {
                 // Loggt und gibt eine Erfolgsantwort zurück, wenn die API-Anfrage erfolgreich war

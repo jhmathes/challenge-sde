@@ -8,6 +8,10 @@ import javax.annotation.Nonnull;
  * Diese Klasse enthält Methoden zum Konvertieren von Datumsobjekten.
  */
 public class DateConverter {
+
+    private DateConverter() {
+    }
+
     /**
      * Konvertiert ein DateType-Objekt in einen String im Format "TT.MM.JJJJ".
      *

@@ -8,6 +8,8 @@ import org.hl7.fhir.r4.model.PrimitiveType;
 import java.util.stream.Collectors;
 
 public class PersonMapper {
+    private PersonMapper() {
+    }
 
     public static Person mapPatientToPerson(Patient patient) {
         // Extrahieren des Vornamens aus der Patient-Ressource
