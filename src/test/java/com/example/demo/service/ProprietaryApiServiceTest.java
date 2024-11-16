@@ -77,8 +77,8 @@ class ProprietaryApiServiceTest {
     private static Document buildDefaultDocument() {
         Document.DocumentBuilder documentBuilder = new Document.DocumentBuilder();
         documentBuilder.setKdlCode("codeCodeCode");
-        documentBuilder.setPatientId("1");
-        documentBuilder.setVisitNumber("2");
+        documentBuilder.setPatientId(1);
+        documentBuilder.setVisitNumber(2);
         documentBuilder.setDateCreated("01.01.1970");
         documentBuilder.setContentB64("contentB64".getBytes(StandardCharsets.UTF_8));
         return documentBuilder.build();

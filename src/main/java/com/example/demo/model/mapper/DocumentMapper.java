@@ -2,12 +2,11 @@ package com.example.demo.model.mapper;
 
 import com.example.demo.model.Document;
 import com.example.demo.util.DateConverter;
-import org.hl7.fhir.r4.model.Attachment;
-import org.hl7.fhir.r4.model.DocumentReference;
-import org.hl7.fhir.r4.model.Reference;
+import org.hl7.fhir.r4.model.*;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 public class DocumentMapper {
     private DocumentMapper() {
@@ -30,13 +29,11 @@ public class DocumentMapper {
         // two possibilities to get the creation date of the document
         // 1. documentReference.getDate() (in IHE vorhanden)
         // 2. documentReference.getContent().get(0).getAttachment().getCreation() (empfohlen)
-        Date creation = attachment.getCreation();
-        documentBuilder.setDateCreated(DateConverter.convertDate(creation));
-        // KDL code is a ValueSet https://simplifier.net/packages/dvmd.kdl.r4/2024.0.0/files/2436847
-        documentReference.getType().getCoding().stream().filter(coding -> coding.getSystem().equals("http://dvmd.de/fhir/CodeSystem/kdl")).findFirst()
-                .ifPresentOrElse(coding -> documentBuilder.setKdlCode(coding.getCode()), () -> {
-                    throw new IllegalArgumentException("KDL code is missing.");
-                });
+        documentBuilder.setDateCreated(DateConverter.convertDate(attachment.getCreation()));
+
+        findKdlCoding(documentReference).ifPresentOrElse(coding -> documentBuilder.setKdlCode(coding.getCode()), () -> {
+            throw new IllegalArgumentException("KDL code is missing.");
+        });
 
         documentBuilder.setContentB64(attachment.getData());
 
@@ -50,20 +47,29 @@ public class DocumentMapper {
         return documentBuilder.build();
     }
 
-    private static String getIdFromReference(Reference reference) {
-        if (reference == null || reference.getReference() == null) {
-            throw new IllegalArgumentException("Reference missing.");
-        }
-        //        Example Handling for dealing with an Identifier if Integer is needed
-        //        Identifier identifier = reference.getIdentifier();
-        //        if (identifier != null) {
-        //            try {
-        //                return Integer.valueOf(identifier.getValue());
-        //            } catch (NumberFormatException e) {
-        //                throw new IllegalArgumentException("Identifier is not a number.");
-        //            }
+    @NotNull
+    protected static Optional<Coding> findKdlCoding(DocumentReference documentReference) {
+        // KDL code is a ValueSet https://simplifier.net/packages/dvmd.kdl.r4/2024.0.0/files/2436847
+        return documentReference.getType().getCoding()
+                .stream().filter(coding -> coding.getSystem().equals("http://dvmd.de/fhir/CodeSystem/kdl")).findFirst();
+    }
+
+    protected static Integer getIdFromReference(Reference reference) {
+        // Example Handling Reference which is required
+        //        if (reference == null || reference.getReference() == null) {
+        //            throw new IllegalArgumentException("Reference missing.");
         //        }
-        return reference.getReference();
+        // return reference.getReference();
+
+        Identifier identifier = reference.getIdentifier();
+        if (identifier != null) {
+            try {
+                return Integer.valueOf(identifier.getValue());
+            } catch (NumberFormatException e) {
+                throw new IllegalArgumentException("Identifier is not a number.");
+            }
+        }
+        throw new IllegalArgumentException("Reference missing.");
 
     }
 }

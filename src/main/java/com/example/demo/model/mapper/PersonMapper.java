@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 public class PersonMapper {
     private static final Logger logger = Logger.getLogger(PersonMapper.class.getName());
 
-    private final static List<HumanName.NameUse> preferredNameUses = List.of(HumanName.NameUse.OFFICIAL, HumanName.NameUse.USUAL);
+    private static final List<HumanName.NameUse> preferredNameUses = List.of(HumanName.NameUse.OFFICIAL, HumanName.NameUse.USUAL);
 
     private PersonMapper() {
     }

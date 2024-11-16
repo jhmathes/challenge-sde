@@ -3,13 +3,13 @@ package com.example.demo.model;
 public class Document {
     String kdlCode;
     //SubjectReference in DocumentReference is currently only required as String
-    String patientId;
+    Integer patientId;
     //SubjectReference in DocumentReference is currently only required as String
-    String visitNumber;
+    Integer visitNumber;
     String dateCreated;
     byte[] contentB64;
 
-    private Document(String kdlCode, String patientId, String visitNumber, String dateCreated, byte[] contentB64) {
+    private Document(String kdlCode, Integer patientId, Integer visitNumber, String dateCreated, byte[] contentB64) {
         this.kdlCode = kdlCode;
         this.patientId = patientId;
         this.visitNumber = visitNumber;
@@ -25,19 +25,19 @@ public class Document {
         this.kdlCode = kdlCode;
     }
 
-    public String getPatientId() {
+    public Integer getPatientId() {
         return patientId;
     }
 
-    public void setPatientId(String patientId) {
+    public void setPatientId(Integer patientId) {
         this.patientId = patientId;
     }
 
-    public String getVisitNumber() {
+    public Integer getVisitNumber() {
         return visitNumber;
     }
 
-    public void setVisitNumber(String visitNumber) {
+    public void setVisitNumber(Integer visitNumber) {
         this.visitNumber = visitNumber;
     }
 
@@ -59,8 +59,8 @@ public class Document {
 
     public static class DocumentBuilder {
         String kdlCode;
-        String patientId;
-        String visitNumber;
+        Integer patientId;
+        Integer visitNumber;
         String dateCreated;
         byte[] contentB64;
 
@@ -69,12 +69,12 @@ public class Document {
             return this;
         }
 
-        public DocumentBuilder setPatientId(String patientId) {
+        public DocumentBuilder setPatientId(Integer patientId) {
             this.patientId = patientId;
             return this;
         }
 
-        public DocumentBuilder setVisitNumber(String visitNumber) {
+        public DocumentBuilder setVisitNumber(Integer visitNumber) {
             this.visitNumber = visitNumber;
             return this;
         }
