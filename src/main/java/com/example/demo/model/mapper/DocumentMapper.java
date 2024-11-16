@@ -31,7 +31,7 @@ public class DocumentMapper {
         // 2. documentReference.getContent().get(0).getAttachment().getCreation() (empfohlen)
         documentBuilder.setDateCreated(DateConverter.convertDate(attachment.getCreation()));
 
-        findKdlCoding(documentReference).ifPresentOrElse(coding -> documentBuilder.setKdlCode(coding.getCode()), () -> {
+        extractKDLCoding(documentReference).ifPresentOrElse(coding -> documentBuilder.setKdlCode(coding.getCode()), () -> {
             throw new IllegalArgumentException("KDL code is missing.");
         });
 
@@ -48,7 +48,7 @@ public class DocumentMapper {
     }
 
     @NotNull
-    protected static Optional<Coding> findKdlCoding(DocumentReference documentReference) {
+    protected static Optional<Coding> extractKDLCoding(DocumentReference documentReference) {
         // KDL code is a ValueSet https://simplifier.net/packages/dvmd.kdl.r4/2024.0.0/files/2436847
         return documentReference.getType().getCoding()
                 .stream().filter(coding -> coding.getSystem().equals("http://dvmd.de/fhir/CodeSystem/kdl")).findFirst();

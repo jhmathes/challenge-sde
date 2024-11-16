@@ -13,8 +13,8 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 class DocumentMapperTest {
 
     @Test
-    void findKdlCoding_emptyDocumentReference() {
-        Optional<Coding> kdlCoding = DocumentMapper.findKdlCoding(new DocumentReference());
+    void extractKDLCoding_emptyDocumentReference() {
+        Optional<Coding> kdlCoding = DocumentMapper.extractKDLCoding(new DocumentReference());
         assertFalse(kdlCoding.isPresent());
     }
 
