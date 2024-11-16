@@ -2,7 +2,10 @@ package com.example.demo.controller;
 
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.parser.IParser;
+import com.example.demo.service.LocalFhirContext;
 import com.example.demo.service.ProprietaryApiService;
+import org.hl7.fhir.r4.model.DomainResource;
+import org.hl7.fhir.r4.model.OperationOutcome;
 import org.hl7.fhir.r4.model.Patient;
 import org.hl7.fhir.r4.model.PrimitiveType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Nonnull;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -24,17 +28,16 @@ public class FhirController {
     private static final Logger logger = Logger.getLogger(FhirController.class.getName());
 
     private final ProprietaryApiService proprietaryApiService;
+    private final FhirContext fhirContext;
 
     @Autowired
-    public FhirController(ProprietaryApiService proprietaryApiService) {
+    public FhirController(ProprietaryApiService proprietaryApiService, LocalFhirContext localFhirContext) {
         this.proprietaryApiService = proprietaryApiService;
+        this.fhirContext = localFhirContext.getFhirContext();
     }
 
-    // Erzeugt ein FhirContext-Objekt für FHIR R4
-    private final FhirContext fhirContext = FhirContext.forR4();
-
     @PostMapping("/Patient") // Mapped HTTP POST-Anfragen auf diesen Endpunkt
-    public ResponseEntity<String> createPatient(@RequestBody String patientResource) {
+    public ResponseEntity<DomainResource> createPatient(@RequestBody String patientResource) {
         try {
             // Loggt die erhaltene Anfrage
             logger.info(() -> "Received request to create patient: " + patientResource);
@@ -66,17 +69,26 @@ public class FhirController {
             if (apiSuccess) {
                 // Loggt und gibt eine Erfolgsantwort zurück, wenn die API-Anfrage erfolgreich war
                 logger.info("Patient data sent successfully.");
-                return ResponseEntity.status(HttpStatus.CREATED).body("Patient created successfully.");
+                return ResponseEntity.status(HttpStatus.CREATED).body(patient);
             } else {
                 // Loggt und gibt eine Fehlerantwort zurück, wenn die API-Anfrage fehlschlägt
                 logger.severe("Failed to send patient data to proprietary API.");
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal Server Error.");
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(buildOpperationOutcome("Error occurred while creating patient."));
             }
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             // Loggt und gibt eine Fehlerantwort zurück, wenn eine Ausnahme auftritt
             logger.log(Level.SEVERE, "Exception occurred while creating patient", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal Server Error.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(buildOpperationOutcome("Exception occurred while creating patient."));
         }
+    }
+
+    @Nonnull
+    private static OperationOutcome buildOpperationOutcome(String message) {
+        OperationOutcome operationOutcome = new OperationOutcome();
+        operationOutcome.addIssue().setSeverity(OperationOutcome.IssueSeverity.ERROR)
+                .setCode(OperationOutcome.IssueType.EXCEPTION)
+                .setDiagnostics(message);
+        return operationOutcome;
     }
 
     private String convertDate(String birthDate) {
