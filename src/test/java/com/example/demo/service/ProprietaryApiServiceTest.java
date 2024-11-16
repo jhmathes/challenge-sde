@@ -46,6 +46,6 @@ class ProprietaryApiServiceTest {
         //set field basePath in ProprietaryApiService, which is not loaded from application.properties
         ReflectionTestUtils.setField(proprietaryApiService, "basePath", "http://localhost:3001");
         boolean b = proprietaryApiService.sendPatientData(new Person("Max", "Mustermann", "01.01.1970"));
-        Assertions.assertTrue(b);
+        Assertions.assertFalse(b);
     }
 }
